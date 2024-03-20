@@ -220,7 +220,7 @@ class _ShowproductState extends State<Showproduct>
                       );
                     },
                     title: Text(item.productName),
-                    subtitle: Text(item.price.toString()),
+                    subtitle: Text(item.price.toString() + " บาท"),
                     trailing: IconButton(
                       onPressed: () {
                         QuickAlert.show(
