@@ -106,7 +106,45 @@ class _ShowproductState extends State<Showproduct>
         actions: [
           IconButton(
             onPressed: () async {
-              await logout(context);
+              QuickAlert.show(
+                onCancelBtnTap: () {
+                  Navigator.pop(context);
+                },
+                context: context,
+                type: QuickAlertType.confirm,
+                title: 'แน่ใจ??',
+                text: 'คุณต้องการที่จะออกจากระบบ??',
+                titleAlignment: TextAlign.center,
+                textAlignment: TextAlign.center,
+                confirmBtnText: 'ตกลง',
+                cancelBtnText: 'ยกเลิก',
+                confirmBtnColor: const Color.fromARGB(255, 185, 37, 37),
+                backgroundColor: Colors.white,
+                headerBackgroundColor: Colors.grey,
+                confirmBtnTextStyle: const TextStyle(
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  fontWeight: FontWeight.bold,
+                ),
+                barrierColor: const Color.fromARGB(139, 46, 46, 46),
+                titleColor: const Color.fromARGB(255, 1, 1, 1),
+                textColor: const Color.fromARGB(255, 1, 1, 1),
+                cancelBtnTextStyle: const TextStyle(
+                  color: Color.fromARGB(255, 33, 33, 33),
+                  fontWeight: FontWeight.bold,
+                ),
+                onConfirmBtnTap: () async {
+                  Navigator.pop(context); // Close the confirmation dialog
+                  QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.success,
+                    text: 'ออกจากระบบสำเร็จ!',
+                    showConfirmBtn: false,
+                    autoCloseDuration: const Duration(seconds: 3),
+                  ).then((value) async {
+                    await logout(context); // Delete the product
+                  });
+                },
+              );
             },
             icon: const Icon(Icons.logout),
           ),
@@ -297,9 +335,11 @@ class _ShowproductState extends State<Showproduct>
       );
 
       if (response.statusCode == 200) {
+        // Show confirmation dialog using QuickAlert
+
         // Remove user-related information from SharedPreferences
-        prefs.remove('user');
-        prefs.remove('token');
+        await prefs.remove('userToken');
+        await prefs.remove('username');
 
         // Navigate to the LoginPage
         Navigator.pushReplacement(
@@ -309,7 +349,7 @@ class _ShowproductState extends State<Showproduct>
           ),
         );
 
-        print("Logout success");
+        print("ออกจากระบบสำเร็จ!");
       } else {
         print("token : $userToken");
         print("Logout failed. Status code: ${response.statusCode}");

@@ -52,11 +52,11 @@ class LoginScreen extends StatelessWidget {
   }
 
   Future<String?> _signupUser(SignupData data) async {
-    int role = 2;
     print("------------------------------------");
     print("Email: ${data.name}");
     print("password: ${data.password}");
     print("ConfirmPassoword: ${data.password}");
+    print("address: ${data.additionalSignupData!['address']}");
     print("name: ${data.additionalSignupData!['fullname']}");
     print("Telephone: ${data.additionalSignupData!['phone_number']}");
     print("-----------------------------------");
@@ -66,10 +66,17 @@ class LoginScreen extends StatelessWidget {
         Uri.parse('https://642021157.pungpingcoding.online/api/register'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
+          // "name": data.additionalSignupData!["fullname"],
+          // "email": data.name,
+          // "password": data.password,
+          // "password_confirmation": data.password,
+          // "telephone": data.additionalSignupData!["phone_number"],
+
           "name": data.additionalSignupData!["fullname"],
           "email": data.name,
           "password": data.password,
           "password_confirmation": data.password,
+          "address": data.additionalSignupData!["address"],
           "telephone": data.additionalSignupData!["phone_number"],
         }),
       );
@@ -109,6 +116,11 @@ class LoginScreen extends StatelessWidget {
           keyName: 'fullname',
           displayName: 'ชื่อ-นามสกุล',
           icon: Icon(FontAwesomeIcons.user),
+        ),
+        const UserFormField(
+          keyName: 'address',
+          displayName: 'ที่อยู่',
+          icon: Icon(FontAwesomeIcons.locationDot),
         ),
         UserFormField(
           keyName: 'phone_number',
